@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-image: url("static/img/c3.webp");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #000; /* Set the text color to contrast with the background image */
+        }
+    </style>
+    <title>Recruitment Site - Home</title>
+ 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <img src="static/img/c1.png" alt="Recruiters Image" class="img-fluid rounded-circle" style="max-width: 200px;">
+            <h1 class="display-4 mt-3">Welcome to Recruiters</h1>
+           
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h1 class="mb-4">Available Jobs</h1>
+        <form method="GET" class="mb-4">
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" name="q" class="form-control" placeholder="Search by title..." value="{{ query }}">
+                </div>
+                <div class="col">
+                    <select name="employment_type" class="form-control">
+                        <option value="" {% if not employment_type %}selected{% endif %}>All Employment Types</option>
+                        <option value="Full-Time" {% if employment_type == 'Full-Time' %}selected{% endif %}>Full-Time</option>
+                        <option value="Part-Time" {% if employment_type == 'Part-Time' %}selected{% endif %}>Part-Time</option>
+                        <option value="Contract" {% if employment_type == 'Contract' %}selected{% endif %}>Contract</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="text" name="company_name" class="form-control" placeholder="Search by company name..." value="{{ company_name }}">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Type of Employment</th>
+                    <th>Company Name</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td>{{ job.title }}</td>
+                    <td>{{ job.get_employment_type_display }}</td>
+                    <td>{{ job.company_name }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#applyModal{{ job.id }}">Apply</button>
+                    </td>
+                </tr>
+           
+                <div class="modal fade" id="applyModal{{ job.id }}" tabindex="-1" role="dialog" aria-labelledby="applyModal{{ job.id }}Label" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="applyModal{{ job.id }}Label">Applied for "{{ job.title }}"</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Your application for "{{ job.title }}" has been submitted.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+       
+        <nav aria-label="Job pagination">
+            <ul class="pagination justify-content-center">
+                {% if jobs.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if query %}&q={{ query }}{% endif %}{% if employment_type %}&employment_type={{ employment_type }}{% endif %}{% if company_name %}&company_name={{ company_name }}{% endif %}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ jobs.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if employment_type %}&employment_type={{ employment_type }}{% endif %}{% if company_name %}&company_name={{ company_name }}{% endif %}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% for num in jobs.paginator.page_range %}
+                    {% if jobs.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if employment_type %}&employment_type={{ employment_type }}{% endif %}{% if company_name %}&company_name={{ company_name }}{% endif %}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                {% if jobs.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ jobs.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if employment_type %}&employment_type={{ employment_type }}{% endif %}{% if company_name %}&company_name={{ company_name }}{% endif %}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ jobs.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if employment_type %}&employment_type={{ employment_type }}{% endif %}{% if company_name %}&company_name={{ company_name }}{% endif %}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        $('.btn-primary').click(function () {
+            $(this).attr("disabled", true); 
+            var modalId = $(this).data('target'); 
+            $(modalId).modal('show'); 
+        });
+    });
+</script>
+</body>
+</html>

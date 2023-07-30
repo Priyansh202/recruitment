@@ -1,0 +1,25 @@
+<!-- jobs/templates/search_results.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Search Results</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Search Results</h2>
+        <ul class="list-group">
+            {% for job in jobs %}
+            <li class="list-group-item">{{ job.title }} at {{ job.company }}</li>
+            {% empty %}
+            <li class="list-group-item">No jobs found with selected filters.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Add Bootstrap JS link -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
