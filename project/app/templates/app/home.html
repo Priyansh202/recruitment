@@ -69,7 +69,7 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#applyModal{{ job.id }}">Apply</button>
                     </td>
                 </tr>
-                <!-- Modal for the "Applied" message -->
+              
                 <div class="modal fade" id="applyModal{{ job.id }}" tabindex="-1" role="dialog" aria-labelledby="applyModal{{ job.id }}Label" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -91,7 +91,7 @@
                 {% endfor %}
             </tbody>
         </table>
-        <!-- Pagination links -->
+      
         <nav aria-label="Job pagination">
             <ul class="pagination justify-content-center">
                 {% if jobs.has_previous %}
@@ -139,21 +139,20 @@
         $(document).ready(function () {
             $('.btn-primary').click(function () {
                 var button = $(this);
-                var modalId = button.data('target'); // Get the target modal ID
+                var modalId = button.data('target'); 
 
-                // Check if the button has the "applied" class
-                if (button.hasClass('applied')) {
-                    // If already applied, show the "Already Applied" message in the modal
+             
+                if (button.hasClass('applied')) 
                     $(modalId + ' .modal-title').text('Already Applied for "{{ job.title }}"');
                     $(modalId + ' .modal-body').text('You have already applied for "{{ job.title }}".');
                 } else {
-                    // If not applied, show the "Applied" message in the modal and add the "applied" class to the button
+                  
                     $(modalId + ' .modal-title').text('Applied for "{{ job.title }}"');
                     $(modalId + ' .modal-body').text('Your application for "{{ job.title }}" has been submitted.');
                     button.addClass('applied');
                 }
 
-                $(modalId).modal('show'); // Show the modal
+                $(modalId).modal('show'); 
             });
         });
     </script>
