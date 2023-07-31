@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Recruitment Site - Home</title>
     <style>
         body {
             background-image: url("static/img/c3.webp");
@@ -9,9 +10,15 @@
             background-repeat: no-repeat;
             color: #000; /* Set the text color to contrast with the background image */
         }
+        .jumbotron {
+           
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 400px; /* Set the height of the jumbotron */
+            color: black; /* Set the text color to contrast with the jumbotron background image */
+        }
     </style>
-    <title>Recruitment Site - Home</title>
- 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -19,12 +26,12 @@
         <div class="container">
             <img src="static/img/c1.png" alt="Recruiters Image" class="img-fluid rounded-circle" style="max-width: 200px;">
             <h1 class="display-4 mt-3">Welcome to Recruiters</h1>
-           
+            In today's fiercely competitive job market, finding the right talent for a company can be a daunting task. Similarly, job seekers often struggle to identify the ideal career opportunity that matches their skills and aspirations. Enter the world of recruiter firms, also known as recruitment agencies or staffing agencies. These firms act as intermediaries, linking employers and candidates, and play a crucial role in shaping the job landscape. In this piece, we'll delve into the inner workings of a recruiter firm, exploring their key functions, challenges, and the impact they have on both businesses and job seekers.
         </div>
     </div>
     <div class="container mt-5">
         <h1 class="mb-4">Available Jobs</h1>
-        <form method="GET" class="mb-4">
+         <form method="GET" class="mb-4">
             <div class="form-row">
                 <div class="col">
                     <input type="text" name="q" class="form-control" placeholder="Search by title..." value="{{ query }}">
@@ -49,7 +56,7 @@
                     <th>Title</th>
                     <th>Type of Employment</th>
                     <th>Company Name</th>
-                  
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -62,7 +69,7 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#applyModal{{ job.id }}">Apply</button>
                     </td>
                 </tr>
-           
+                <!-- Modal for the "Applied" message -->
                 <div class="modal fade" id="applyModal{{ job.id }}" tabindex="-1" role="dialog" aria-labelledby="applyModal{{ job.id }}Label" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -84,7 +91,7 @@
                 {% endfor %}
             </tbody>
         </table>
-       
+        <!-- Pagination links -->
         <nav aria-label="Job pagination">
             <ul class="pagination justify-content-center">
                 {% if jobs.has_previous %}
@@ -129,13 +136,27 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-    $(document).ready(function () {
-        $('.btn-primary').click(function () {
-            $(this).attr("disabled", true); 
-            var modalId = $(this).data('target'); 
-            $(modalId).modal('show'); 
+        $(document).ready(function () {
+            $('.btn-primary').click(function () {
+                var button = $(this);
+                var modalId = button.data('target'); // Get the target modal ID
+
+                // Check if the button has the "applied" class
+                if (button.hasClass('applied')) {
+                    // If already applied, show the "Already Applied" message in the modal
+                    $(modalId + ' .modal-title').text('Already Applied for "{{ job.title }}"');
+                    $(modalId + ' .modal-body').text('You have already applied for "{{ job.title }}".');
+                } else {
+                    // If not applied, show the "Applied" message in the modal and add the "applied" class to the button
+                    $(modalId + ' .modal-title').text('Applied for "{{ job.title }}"');
+                    $(modalId + ' .modal-body').text('Your application for "{{ job.title }}" has been submitted.');
+                    button.addClass('applied');
+                }
+
+                $(modalId).modal('show'); // Show the modal
+            });
         });
-    });
-</script>
+    </script>
+
 </body>
 </html>

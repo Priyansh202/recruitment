@@ -18,7 +18,7 @@ def home(request):
     if company_name:
         jobs = jobs.filter(company_name=company_name)
 
-    paginator = Paginator(jobs, 3) 
+    paginator = Paginator(jobs, 5)  # Show 10 jobs per page
     page = request.GET.get('page')
     jobs = paginator.get_page(page)
     
